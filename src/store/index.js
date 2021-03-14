@@ -6,7 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     loading: true,
-    online: navigator.onLine,
+    offline: !navigator.onLine,
     coordinates: {
       latitude: null,
       longitude: null
@@ -23,8 +23,8 @@ export default new Vuex.Store({
       commit('setLoading', loading)
     },
 
-    setOnline ({commit}, online) {
-      commit('setOnline', online)
+    setOffline ({commit}, offline) {
+      commit('setOffline', offline)
     },
 
     setCoordinates ({commit}, coordinates) {
@@ -74,8 +74,8 @@ export default new Vuex.Store({
       state.loading = loading
     },
 
-    setOnline: (state, online) => {
-      state.online = online
+    setOffline: (state, offline) => {
+      state.offline = offline
     },
 
     setCoordinates: (state, coordinates) => {

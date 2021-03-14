@@ -5,7 +5,10 @@
                :is-full-page="false"></loading>
 
       <transition name="slide-fade-vertical">
-        <div class="offline-message" v-if="!store.online">You are currently offline. Please connect to the internet to get the latest weather information!</div>
+        <div class="offline-message" v-if="store.offline">
+          <b-icon icon="exclamation-circle-fill"></b-icon>
+          You are currently offline. Please connect to the internet to get the latest weather information!
+        </div>
       </transition>
 
       <form id="form-search" @submit.prevent="onSearch">
@@ -176,6 +179,16 @@
     border-radius: 0;
     min-height: 100vh;
   }
+}
+
+.offline-message {
+  font-size: 16px;
+  padding: .75rem 1.25rem;
+  margin-bottom: 1rem;
+  border: 1px solid #f5c6cb;
+  border-radius: .25rem;
+  color: #721c24;
+  background-color: #f8d7da;
 }
 
 #form-search {
@@ -350,9 +363,6 @@ export default {
   components: {
     Loading
   },
-  data: () => ({
-    searchText: ''
-  }),
   computed: {
     store () {
       return this.$store.state
@@ -393,11 +403,12 @@ export default {
   },
   mounted () {
     window.addEventListener('online', () => {
-      // this.hideOfflineToast()
-      this.$store.dispatch('setOnline', true)
+      this.$store.dispatch('setOffline', false)
+      console.log(this.store)
     })
     window.addEventListener('offline', () => {
-      this.$store.dispatch('setOnline', false)
+      this.$store.dispatch('setOffline', true)
+      console.log(this.store)
     })
 
     this.getCurrentLocationWeatherData()
