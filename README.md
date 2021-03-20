@@ -22,17 +22,20 @@ npm run build
 - [x] Use device geolocation data to perform weather API request
   - [x] Current weather
   - [x] 7 day forecast
-- [ ] Save weather data for offline use
+- [x] Save weather data for offline use
 - [x] Create a UI element that shows up when the user is in offline mode
-- [ ] Display relevant information
-- [ ] Mobile responsive layout
-- [ ] Include a set of icons for offline use
-- [ ] Cache weather data for offline use
+- [x] Display relevant information
+- [x] Mobile responsive layout
+- [x] Include a set of icons for offline use
+- [x] Cache weather data for offline use
+- [ ] Disable interactive UI elements that require an internet connection during offline use
+- [ ] Option to toggle units between metric and imperial (Celcius and Fahrenheit) 
+- [ ] Favorites
 
 ## Stretch Objectives
 
 - [ ] Include hourly forecast
-- [ ] Ability to search for weather in a city
+- [x] Ability to search for weather in a city
 - [ ] Ability to save a city to favorites
 - [ ] Ability to see saved favorites
 
@@ -40,6 +43,7 @@ npm run build
 
 - Get weather information based on current time and location
 - Get 7-day weather forecast based on current location
+- Search for weather in a specific location
 
 ## Credits
 
@@ -47,6 +51,7 @@ npm run build
 
 - Vue.js v2
 - VueX
+- vuex-persist
 - Bootstrap 4
 - axios
 - Moment.js

@@ -6,11 +6,7 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import Toasted from 'vue-toasted'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
-
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
-import 'vue-loading-overlay/dist/vue-loading.css';
-import '@/styles/style.scss'
+import '@/styles/app.scss'
 
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
