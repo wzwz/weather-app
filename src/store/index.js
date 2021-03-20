@@ -25,11 +25,9 @@ export default new Vuex.Store({
   },
   getters: {
     filteredFavorites: state => {
-      console.log(state.favoritesFilter)
       let filteredFavorites = state.favorites;
       if (state.favoritesFilter.length) {
         filteredFavorites = filteredFavorites.filter(favorite => favorite.name.includes(state.favoritesFilter))
-        console.log(filteredFavorites)
       }
       return filteredFavorites.sort((a, b) => a.name.localeCompare(b.name))
     }
@@ -60,7 +58,6 @@ export default new Vuex.Store({
           key: process.env.VUE_APP_GOOGLE_API_KEY
         }
       });
-      console.log(response);
       commit('setAddress', response.data.results[0].formatted_address)
       commit('setCoordinates', {
         latitude: response.data.results[0].geometry.location.lat,
@@ -74,7 +71,6 @@ export default new Vuex.Store({
           key: process.env.VUE_APP_GOOGLE_API_KEY
         }
       });
-      console.log(response);
       commit('setAddress', response.data.results[0].formatted_address)
     },
     async getWeather ({commit, state}) {
@@ -87,7 +83,6 @@ export default new Vuex.Store({
           appid: process.env.VUE_APP_WEATHER_API_KEY
         }
       });
-      console.log(response);
       commit('setWeather', response.data)
     },
     setFavoriteName ({commit}, favoriteName) {
@@ -96,11 +91,8 @@ export default new Vuex.Store({
     addToFavorites ({commit}, favorite) {
       commit('addToFavorites', favorite)
     },
-    removeFromFavorites ({commit}) {
-      commit('removeFromFavorites')
-    },
-    removeFromFavoritesByName ({commit}, favoriteName) {
-      commit('removeFromFavoritesByName', favoriteName)
+    removeFromFavorites ({commit}, address) {
+      commit('removeFromFavorites', address)
     },
     setFavoritesFilter ({commit}, favoritesFilter) {
       commit('setFavoritesFilter', favoritesFilter)
@@ -142,11 +134,8 @@ export default new Vuex.Store({
     addToFavorites (state, favorite) {
       state.favorites.push(favorite)
     },
-    removeFromFavorites (state) {
-      state.favorites = state.favorites.filter(favorite => !(favorite.coordinates.latitude === state.coordinates.latitude && favorite.coordinates.longitude === state.coordinates.longitude))
-    },
-    removeFromFavoritesByName (state, favoriteName) {
-      state.favorites = state.favorites.filter(favorite => favorite.name !== favoriteName)
+    removeFromFavorites (state, address) {
+      state.favorites = state.favorites.filter(favorite => favorite.address !== address)
     },
     setFavoritesFilter (state, favoritesFilter) {
       state.favoritesFilter = favoritesFilter
