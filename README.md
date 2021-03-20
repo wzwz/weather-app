@@ -28,16 +28,16 @@ npm run build
 - [x] Mobile responsive layout
 - [x] Include a set of icons for offline use
 - [x] Cache weather data for offline use
-- [ ] Disable interactive UI elements that require an internet connection during offline use
+- [x] Disable interactive UI elements that require an internet connection during offline use
 - [ ] Option to toggle units between metric and imperial (Celcius and Fahrenheit) 
-- [ ] Favorites
+- [x Favorites
 
 ## Stretch Objectives
 
 - [ ] Include hourly forecast
 - [x] Ability to search for weather in a city
-- [ ] Ability to save a city to favorites
-- [ ] Ability to see saved favorites
+- [x] Ability to save a city to favorites
+- [x] Ability to see saved favorites
 
 ## Features
 

@@ -20,7 +20,19 @@ export default new Vuex.Store({
     locationIcon: 'search',
     units: 'metric',
     favorites: [],
+    favoritesFilter: '',
     favoriteName: ''
+  },
+  getters: {
+    filteredFavorites: state => {
+      console.log(state.favoritesFilter)
+      let filteredFavorites = state.favorites;
+      if (state.favoritesFilter.length) {
+        filteredFavorites = filteredFavorites.filter(favorite => favorite.name.includes(state.favoritesFilter))
+        console.log(filteredFavorites)
+      }
+      return filteredFavorites.sort((a, b) => a.name.localeCompare(b.name))
+    }
   },
   actions: {
     setLoading ({commit}, loading) {
@@ -87,6 +99,12 @@ export default new Vuex.Store({
     removeFromFavorites ({commit}) {
       commit('removeFromFavorites')
     },
+    removeFromFavoritesByName ({commit}, favoriteName) {
+      commit('removeFromFavoritesByName', favoriteName)
+    },
+    setFavoritesFilter ({commit}, favoritesFilter) {
+      commit('setFavoritesFilter', favoritesFilter)
+    },
     selectFavorite ({commit}, favoriteName) {
       commit('selectFavorite', favoriteName)
     }
@@ -126,6 +144,12 @@ export default new Vuex.Store({
     },
     removeFromFavorites (state) {
       state.favorites = state.favorites.filter(favorite => !(favorite.coordinates.latitude === state.coordinates.latitude && favorite.coordinates.longitude === state.coordinates.longitude))
+    },
+    removeFromFavoritesByName (state, favoriteName) {
+      state.favorites = state.favorites.filter(favorite => favorite.name !== favoriteName)
+    },
+    setFavoritesFilter (state, favoritesFilter) {
+      state.favoritesFilter = favoritesFilter
     },
     selectFavorite (state, favoriteName) {
       const selectedFavorite = state.favorites.find(favorite => favorite.name === favoriteName)

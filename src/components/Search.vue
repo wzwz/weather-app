@@ -1,19 +1,35 @@
 <template>
   <form id="form-search" @submit.prevent="onSearch">
     <div class="search-input-container">
-      <input type="text" id="form-search-input" class="form-control" placeholder="Search" ref="searchInput" v-model="store.searchText" required />
+      <b-form-input
+          id="form-search-input"
+          placeholder="Search"
+          ref="searchInput"
+          v-model="store.searchText"
+          required
+          :disabled="store.offline"
+      ></b-form-input>
       <button class="btn btn-clear-search" title="Clear search" type="button" v-if="store.searchText.length" @click.prevent="onClearSearch">
         <b-icon icon="x"></b-icon>
       </button>
     </div>
 
-    <button class="btn btn-search-input" title="Search">
+    <b-button
+        class="btn btn-search-input"
+        title="Search"
+        :disabled="store.offline"
+    >
       <b-icon icon="search"></b-icon>
-    </button>
+    </b-button>
 
-    <button class="btn btn-search-current-location" title="Get your current location" type="button" @click.prevent="getCurrentLocationWeatherData">
+    <b-button
+        class="btn btn-search-current-location"
+        title="Get your current location"
+        @click.prevent="getCurrentLocationWeatherData"
+        :disabled="store.offline"
+    >
       <b-icon icon="geo-alt-fill"></b-icon>
-    </button>
+    </b-button>
   </form>
 </template>
 
@@ -35,6 +51,7 @@
     }
 
     .btn-clear-search {
+      background: none;
       position: absolute;
       right: 5px;
       top: 50%;

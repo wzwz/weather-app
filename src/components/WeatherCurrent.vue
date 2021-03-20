@@ -1,8 +1,13 @@
 <template>
   <div class="weather-results mt-3" v-if="store.weather">
-    <div class="weather-results-header">
+    <div class="weather-results-header mb-2">
       <div class="weather-results-header-left">
-        <b-dropdown ref="weatherDropdown" toggle-class="weather-dropdown-menu" no-caret>
+        <b-dropdown
+            ref="weatherDropdown"
+            toggle-class="weather-dropdown-menu"
+            no-caret
+            :disabled="store.offline"
+        >
           <template #button-content>
             <b-icon class="weather-dropdown-menu-btn" icon="list"></b-icon>
           </template>
@@ -71,12 +76,23 @@
             header-border-variant="light"
             hide-footer
         >
-          <b-list-group v-if="store.favorites.length">
-            <b-list-group-item button v-for="favorite in store.favorites" :key="favorite.name" @click="onSelectFavorite(favorite.name)">
-              <h5>{{ favorite.name }}</h5>
-              <div>{{ favorite.address }}</div>
-            </b-list-group-item>
-          </b-list-group>
+          <div v-if="store.favorites.length">
+            <b-form-input v-model="store.favoritesFilter" placeholder="Search favorites" class="mb-3"></b-form-input>
+            <b-list-group v-if="this.$store.getters.filteredFavorites.length" class="weather-favorites-list">
+              <b-list-group-item button v-for="favorite in this.$store.getters.filteredFavorites" :key="favorite.name" @click="onSelectFavorite(favorite.name)">
+                <div class="d-flex justify-content-between">
+                  <h5>{{ favorite.name }}</h5>
+                  <b-button size="sm" variant="link" class="pt-0" @click.prevent.stop="onRemoveFromFavoritesByName(favorite.name)">
+                    <b-icon icon="trash" variant="danger" title="Remove from Favorites"></b-icon>
+                  </b-button>
+                </div>
+                <div>{{ favorite.address }}</div>
+              </b-list-group-item>
+            </b-list-group>
+            <div v-else class="text-center p-3">
+              There are no favorites that match your search terms!
+            </div>
+          </div>
           <div v-else class="text-center p-3">
             You have not added any locations as favorites yet!
           </div>
@@ -89,10 +105,24 @@
         <div class="weather-results-address" v-if="store.address">
           {{ store.address }}
           <transition name="fade">
-            <b-button class="p-0" variant="link" title="Remove from Favorites" v-if="isFavorite" @click.prevent="onRemoveFromFavorites">
+            <b-button
+                v-if="isFavorite"
+                class="p-0"
+                variant="link"
+                title="Remove from Favorites"
+                @click.prevent="onRemoveFromFavorites"
+                :disabled="store.offline"
+            >
               <b-icon icon="star-fill" variant="warning"></b-icon>
             </b-button>
-            <b-button class="p-0" variant="link" title="Add to Favorites" v-else v-b-modal.addToFavoritesModal>
+            <b-button
+                v-else
+                class="p-0"
+                variant="link"
+                title="Add to Favorites"
+                v-b-modal.addToFavoritesModal
+                :disabled="store.offline"
+            >
               <b-icon icon="star" variant="warning"></b-icon>
             </b-button>
           </transition>
@@ -200,6 +230,19 @@
 </template>
 
 <style lang="scss">
+#favoritesListModal {
+
+  .modal-body {
+    padding-bottom: 0;
+
+    .weather-favorites-list {
+      max-height: 400px;
+      overflow-y: scroll;
+      margin: 0 -16px;
+    }
+  }
+}
+
 .weather-results {
 
   .weather-results-header {
@@ -325,7 +368,11 @@ export default {
       return this.$store.state
     },
     isFavorite () {
-      return (this.$store.state.favorites.find(favorite => favorite.coordinates.latitude === this.$store.state.coordinates.latitude && favorite.coordinates.longitude === this.$store.state.coordinates.longitude)).length > 0
+      return this.$store.state.favorites.find(favorite => favorite.coordinates.latitude === this.$store.state.coordinates.latitude && favorite.coordinates.longitude === this.$store.state.coordinates.longitude)
+    },
+    filteredFavorites () {
+      const filteredFavorites = this.$store.state.favorites;
+      return filteredFavorites.sort((a, b) => a.name > b.name)
     }
   },
   methods: {
@@ -336,9 +383,9 @@ export default {
       const duplicateNameCheck = this.$store.state.favorites.find(favorite => favorite.name === this.$store.state.favoriteName.trim())
       const duplicateCoordinatesCheck = this.$store.state.favorites.find(favorite => favorite.coordinates.latitude === this.$store.state.coordinates.latitude && favorite.coordinates.longitude === this.$store.state.coordinates.longitude)
 
-      if (duplicateNameCheck.length > 0) {
+      if (duplicateNameCheck) {
         this.$toasted.error("This name is already in use. Please choose another!")
-      } else if (duplicateCoordinatesCheck.length > 0) {
+      } else if (duplicateCoordinatesCheck) {
         this.$toasted.error("This location is already saved as a favorite!")
       } else {
         this.$store.dispatch('addToFavorites', {
@@ -355,6 +402,10 @@ export default {
     },
     onRemoveFromFavorites () {
       this.$store.dispatch('removeFromFavorites')
+      this.$toasted.success("Location has been removed from favorites!")
+    },
+    onRemoveFromFavoritesByName (favoriteName) {
+      this.$store.dispatch('removeFromFavoritesByName', favoriteName)
       this.$toasted.success("Location has been removed from favorites!")
     },
     async onSelectFavorite (favoriteName) {

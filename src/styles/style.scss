@@ -30,8 +30,10 @@ body {
 .toasted-container.msg-toast-container {
 
   &.top-right {
-    top: 20px;
-    right: 30px;
+    @media (min-width: 601px) {
+      top: 20px;
+      right: 30px;
+    }
   }
 }
 

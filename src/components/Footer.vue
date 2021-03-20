@@ -1,9 +1,14 @@
 <template>
   <div class="footer" v-if="store.weather">
-    <a href="javascript:;" @click.prevent="onRefresh" class="last-updated">
+    <b-link
+        href="javascript:;"
+        @click.prevent="onRefresh"
+        class="last-updated"
+        :disabled="store.offline"
+    >
       <b-icon icon="arrow-repeat" class="btn-refresh"></b-icon>
       Last updated {{ new Date(store.weather.current.dt * 1000) | moment("dddd, MMMM Do YYYY h:mma") }}
-    </a>
+    </b-link>
   </div>
 </template>
 
