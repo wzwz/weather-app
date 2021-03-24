@@ -4,7 +4,6 @@
         ref="weatherDropdown"
         toggle-class="weather-dropdown-menu"
         no-caret
-        :disabled="store.offline"
     >
       <template #button-content>
         <b-icon class="weather-dropdown-menu-btn" icon="list"></b-icon>

@@ -7,9 +7,15 @@
           ref="searchInput"
           v-model="store.searchText"
           required
-          :disabled="store.offline"
       ></b-form-input>
-      <button class="btn btn-clear-search" title="Clear search" type="button" v-if="store.searchText.length" @click.prevent="onClearSearch">
+
+      <button
+          v-if="store.searchText.length"
+          class="btn btn-clear-search"
+          title="Clear search"
+          type="button"
+          @click.prevent="onClearSearch"
+      >
         <b-icon icon="x"></b-icon>
       </button>
     </div>
@@ -17,7 +23,7 @@
     <b-button
         class="btn btn-search-input"
         title="Search"
-        :disabled="store.offline"
+        @click.prevent="onSearch"
     >
       <b-icon icon="search"></b-icon>
     </b-button>
@@ -26,7 +32,6 @@
         class="btn btn-search-current-location"
         title="Get your current location"
         @click.prevent="getCurrentLocationWeatherData"
-        :disabled="store.offline"
     >
       <b-icon icon="geo-alt-fill"></b-icon>
     </b-button>
@@ -88,9 +93,13 @@ export default {
       if (!this.$store.state.offline) {
         this.$store.dispatch('setLoading', true)
 
-        await this.$store.dispatch('getGeocodeBySearch')
-        await this.$store.dispatch('getWeather')
+        const hasSearchResults = await this.$store.dispatch('getGeocodeBySearch')
 
+        if (hasSearchResults) {
+          await this.$store.dispatch('getWeather')
+        } else {
+          this.$toasted.error("No locations results found!")
+        }
         this.$store.dispatch('setLoading', false)
       }
     },

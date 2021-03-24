@@ -58,11 +58,17 @@ export default new Vuex.Store({
           key: process.env.VUE_APP_GOOGLE_API_KEY
         }
       });
-      commit('setAddress', response.data.results[0].formatted_address)
-      commit('setCoordinates', {
-        latitude: response.data.results[0].geometry.location.lat,
-        longitude: response.data.results[0].geometry.location.lng
-      })
+
+      if (response.data.results.length) {
+        commit('setAddress', response.data.results[0].formatted_address)
+        commit('setCoordinates', {
+          latitude: response.data.results[0].geometry.location.lat,
+          longitude: response.data.results[0].geometry.location.lng
+        })
+        return true;
+      } else {
+        return false;
+      }
     },
     async getReverseGeocode ({commit, state}) {
       const response = await Vue.axios.get(process.env.VUE_APP_GOOGLE_API_MAPS_GEOCODE_URL, {

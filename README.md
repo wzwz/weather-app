@@ -30,7 +30,9 @@ npm run build
 - [x] Cache weather data for offline use
 - [x] Disable interactive UI elements that require an internet connection during offline use
 - [ ] Option to toggle units between metric and imperial (Celcius and Fahrenheit) 
-- [x Favorites
+- [x] Favorites
+- [ ] PWA functionality
+- [ ] Handle no results case for reverse geocoding API call
 
 ## Stretch Objectives
 
