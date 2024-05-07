@@ -1,4 +1,4 @@
-# Weather PWA
+# Weather App
 
 ## Project setup
 ```
